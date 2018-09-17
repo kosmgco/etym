@@ -1,7 +1,6 @@
 package main
 
 import (
-	"etym/pkg/db"
 	"etym/pkg/fs"
 	"etym/pkg/gziphandler"
 	"etym/pkg/log"
@@ -86,22 +85,6 @@ func main() {
 		log.Infof("Cert file path: %s", certFile)
 		log.Infof("Key file path: %s", keyFile)
 	}
-
-	// connect database
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s",
-		viper.GetString("database.username"),
-		viper.GetString("database.password"),
-		viper.GetString("database.host"),
-		viper.GetString("database.port"),
-		viper.GetString("database.dbname"),
-		viper.GetString("database.args"))
-
-	opts := []db.Option{
-		db.MaxIdleConns(viper.GetInt("database.max_idle_conns")),
-		db.MaxOpenConns(viper.GetInt("database.max_open_conns")),
-		db.ShowSQL(viper.GetBool("database.show_sql")),
-	}
-	db.Initialize(dsn, opts...)
 
 	nex.Before(middleware.Logrequest)
 
